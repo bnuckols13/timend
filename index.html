@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time, Transitions & Flow States - Neurodivergent Affinity Group</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-teal: #5EEAD4;
+            --deep-teal: #14B8A6;
+            --soft-purple: #C084FC;
+            --warm-rose: #FDA4AF;
+            --calm-blue: #93C5FD;
+            --midnight: #1E293B;
+            --slate: #475569;
+            --pearl: #F8FAFC;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #5EEAD4 0%, #93C5FD 100%);
+            --gradient-warm: linear-gradient(135deg, #FDA4AF 0%, #C084FC 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            min-height: 100vh;
+            color: var(--midnight);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating background elements */
+        .bg-circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        .bg-circle1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary-teal);
+            top: -100px;
+            right: -100px;
+        }
+
+        .bg-circle2 {
+            width: 400px;
+            height: 400px;
+            background: var(--soft-purple);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+
+        .bg-circle3 {
+            width: 250px;
+            height: 250px;
+            background: var(--warm-rose);
+            top: 50%;
+            right: 10%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: slideDown 0.8s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--slate);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Opening Quote */
+        .opening-quote {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary-teal);
+        }
+
+        .quote-text {
+            font-style: italic;
+            color: var(--slate);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .quote-author {
+            text-align: right;
+            color: var(--deep-teal);
+            font-weight: 600;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.12);
+        }
+
+        .card h2 {
+            color: var(--midnight);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .symbol {
+            font-size: 2rem;
+        }
+
+        /* Expandable Content Cards */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .content-card {
+            background: linear-gradient(135deg, var(--pearl) 0%, white 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid rgba(94, 234, 212, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .content-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(94, 234, 212, 0.2);
+            border-color: var(--primary-teal);
+        }
+
+        .content-card h3 {
+            color: var(--deep-teal);
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .content-brief {
+            color: var(--slate);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .content-detail {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(94, 234, 212, 0.3);
+            color: var(--slate);
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+
+        .content-card.expanded .content-detail {
+            display: block;
+        }
+
+        .expand-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: var(--gradient-warm);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .content-card.expanded .expand-indicator {
+            transform: rotate(180deg);
+        }
+
+        /* Research Badge */
+        .research-badge {
+            display: inline-block;
+            background: rgba(192, 132, 252, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--soft-purple);
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Discussion Prompts */
+        .prompt-section {
+            background: linear-gradient(135deg, rgba(253, 164, 175, 0.1) 0%, rgba(192, 132, 252, 0.1) 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+        }
+
+        .prompt-section h3 {
+            color: var(--deep-teal);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .prompt-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .prompt-list li {
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            color: var(--slate);
+            line-height: 1.7;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .prompt-list li::before {
+            content: '◈';
+            color: var(--primary-teal);
+            margin-right: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Takeaways */
+        .takeaway-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid var(--primary-teal);
+            margin-top: 2rem;
+        }
+
+        .takeaway-box h3 {
+            color: var(--deep-teal);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .takeaway-list {
+            list-style: none;
+        }
+
+        .takeaway-list li {
+            padding: 0.75rem 0;
+            color: var(--slate);
+            line-height: 1.7;
+            border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+        }
+
+        .takeaway-list li:last-child {
+            border-bottom: none;
+        }
+
+        .takeaway-list li::before {
+            content: '✦';
+            color: var(--primary-teal);
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 1rem; }
+            .card { padding: 1.5rem; }
+            .content-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="bg-circle bg-circle1"></div>
+    <div class="bg-circle bg-circle2"></div>
+    <div class="bg-circle bg-circle3"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Time, Transitions & Flow States</h1>
+            <p class="subtitle">Understanding Our Neurodivergent Relationship with Time</p>
+        </div>
+
+        <!-- Opening Quote -->
+        <div class="opening-quote fade-in">
+            <p class="quote-text">"Time is not a river flowing uniformly. For some of us, it rushes and slows, pools and cascades. Our struggles with time are not moral failures—they are the authentic experience of brains that track time differently."</p>
+            <p class="quote-author">— Neurodivergent Wisdom</p>
+        </div>
+
+        <!-- Learning Context -->
+        <div class="card fade-in">
+            <h2><span class="symbol">⧗</span> Why This Matters</h2>
+            <p style="color: var(--slate); line-height: 1.7;">
+                Many neurodivergent people have a complicated relationship with time. You might lose hours to hyperfocus, struggle to estimate how long tasks will take, feel like you're always running late, or find transitions between activities incredibly difficult. These aren't character flaws—they're neurology. Today we explore the science behind time blindness, transition challenges, and hyperfocus, validating your experience while building practical understanding.
+            </p>
+        </div>
+
+        <!-- Section 1: Time Blindness -->
+        <div class="card fade-in">
+            <h2><span class="symbol">⧖</span> Time Blindness: The Neuroscience</h2>
+            <p style="color: var(--slate); margin-bottom: 1.5rem; line-height: 1.7;">
+                Time blindness isn't laziness or poor character—it's a neurobiological difference in how the brain processes temporal information.
+            </p>
+            
+            <div class="content-grid">
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ The Brain Basis</h3>
+                    <p class="content-brief">Your prefrontal cortex acts as the brain's "conductor" for executive functions including time perception.</p>
+                    <div class="content-detail">
+                        <p><strong>What Research Shows:</strong></p>
+                        <p>Neurodivergent brains show structural and functional differences in the prefrontal cortex, particularly reduced activation during time estimation tasks. Dopamine dysregulation plays a critical role—in ADHD, disrupted dopamine signaling causes the brain's internal "clock" to lag or run inconsistently.</p>
+                        <p style="margin-top: 0.75rem;"><strong>The Evidence:</strong> When ADHD medication restores dopamine balance, many people notice their sense of time "clicks into place"—powerful evidence of time blindness's biological roots.</p>
+                        <span class="research-badge">Evidence-Based</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ What Research Finds</h3>
+                    <p class="content-brief">Controlled studies consistently show significant time perception difficulties in ADHD and autism.</p>
+                    <div class="content-detail">
+                        <p><strong>Time Perception Deficits:</strong></p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                            <li><strong>Time estimation:</strong> Assessing how much time has passed or will be needed</li>
+                            <li><strong>Time reproduction:</strong> Accurately replicating time intervals</li>
+                            <li><strong>Duration discrimination:</strong> Distinguishing between different time lengths</li>
+                            <li><strong>Prospective memory:</strong> Remembering to do things at specific times</li>
+                        </ul>
+                        <p style="margin-top: 0.75rem;">Longitudinal studies following children with ADHD over 20+ years found that time perception errors persist into adulthood—this is a stable neurological difference, not a developmental phase.</p>
+                        <span class="research-badge">20+ Year Studies</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ "Now" vs. "Not Now"</h3>
+                    <p class="content-brief">Many with ADHD experience only two time frames: immediate and everything else.</p>
+                    <div class="content-detail">
+                        <p><strong>Temporal Discounting:</strong></p>
+                        <p>Neuropsychologist Russell Barkley (who coined the term "time blindness" in the 1990s) describes how many with ADHD experience "temporal discounting"—the future feels less real and less motivating than the present moment.</p>
+                        <p style="margin-top: 0.75rem;">This creates only two time frames: "Now" (immediate, urgent) and "Not Now" (everything else). This makes long-term planning and deadline management extremely difficult, not because of poor character, but because of neurologically different time processing.</p>
+                        <p style="margin-top: 0.75rem;"><em>Up to 90% of people with ADHD experience some degree of time blindness.</em></p>
+                        <span class="research-badge">Russell Barkley Research</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ Autism & Time</h3>
+                    <p class="content-brief">In autism, time difficulties arise from different neurological patterns than in ADHD.</p>
+                    <div class="content-detail">
+                        <p><strong>Autism-Specific Differences:</strong></p>
+                        <p>Unlike attention-related time perception issues in ADHD, autistic time difficulties stem primarily from the need for predictability in routine and structure, combined with monotropic attention patterns (intense single-channel focus) that make tracking parallel time demands difficult.</p>
+                        <p style="margin-top: 0.75rem;">Autistic individuals may also struggle with the abstract nature of time as a concept. The difficulty is often sequencing-based: how long will complex sequential activities take when they involve multiple transitions or sensory challenges?</p>
+                        <span class="research-badge">Autism Research</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(94, 234, 212, 0.05); border-radius: 12px; border-left: 4px solid var(--primary-teal);">
+                <p style="color: var(--deep-teal); font-weight: 600; margin-bottom: 0.5rem;">Critical Validation:</p>
+                <p style="color: var(--slate); line-height: 1.7;">
+                    Your time struggles are not moral failures. Brain imaging studies show measurably different neural activation patterns during time-related tasks. This is neurology, not character.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 2: Transitions -->
+        <div class="card fade-in">
+            <h2><span class="symbol">⇄</span> The Neuroscience of Transitions</h2>
+            <p style="color: var(--slate); margin-bottom: 1.5rem; line-height: 1.7;">
+                Transitions aren't just uncomfortable—they require significant cognitive resources that neurodivergent brains allocate differently.
+            </p>
+            
+            <div class="content-grid">
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ Task Switching Costs</h3>
+                    <p class="content-brief">Switching tasks creates measurable cognitive "costs" that are higher for neurodivergent brains.</p>
+                    <div class="content-detail">
+                        <p><strong>What Research Shows:</strong></p>
+                        <p>Studies consistently show children with ADHD demonstrate substantially larger "switch costs" (the cognitive price of changing tasks) compared to non-ADHD children. Remarkably, when medicated, ADHD children's task-switching performance becomes equivalent to controls, providing clear evidence this is neurobiological.</p>
+                        <p style="margin-top: 0.75rem;">Inattentive traits specifically predict higher switch costs when working memory load is high. This explains why transitions feel harder when you're already cognitively loaded.</p>
+                        <span class="research-badge">fMRI Studies</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ Cognitive Flexibility</h3>
+                    <p class="content-brief">Cognitive flexibility is the most commonly impaired executive function in autism.</p>
+                    <div class="content-detail">
+                        <p><strong>Research Findings:</strong></p>
+                        <p>Up to 80% of autistic individuals experience executive function difficulties. Research reviews consistently show challenges with planning and flexibility, often manifesting as perseverative errors (getting stuck in patterns) and difficulties shifting attention.</p>
+                        <p style="margin-top: 0.75rem;">Adults with ADHD are slower in task-switch trials specifically when there's a simultaneous shift of attention between different stimulus features—like switching from visual details to auditory information.</p>
+                        <span class="research-badge">80% Prevalence</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ The Predictability Factor</h3>
+                    <p class="content-brief">For autistic individuals, transitions disrupt the neurological need for predictability.</p>
+                    <div class="content-detail">
+                        <p><strong>Why It Matters:</strong></p>
+                        <p>The brain requires predictable patterns for regulation, and transitions represent moments of uncertainty that can activate the nervous system's threat response.</p>
+                        <p style="margin-top: 0.75rem;">Autistic individuals often need significantly more preparation time before activities, not due to slowness, but due to the executive demands of sequencing multiple preparatory steps while managing sensory considerations. There's always a cognitive "before"—a place we're arriving from—which creates cognitive dissonance when switching states.</p>
+                        <span class="research-badge">Neuroscience Evidence</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ Hyperfocus Inertia</h3>
+                    <p class="content-brief">Transitioning from hyperfocus requires multiple executive function skills simultaneously.</p>
+                    <div class="content-detail">
+                        <p><strong>The Challenge:</strong></p>
+                        <p>Transitioning from a hyperfocused, high-dopamine-reward activity to a lower-dopamine one requires substantial impulse control, emotional regulation, and metacognition—skills that don't come naturally to ADHD brains.</p>
+                        <p style="margin-top: 0.75rem;">The brain becomes so absorbed that disengaging feels like hitting a physical wall. Working memory limitations compound this: transitions require holding multiple pieces of information simultaneously about where you are, where you're going, what needs to stop, and what needs to start.</p>
+                        <span class="research-badge">Dopamine Research</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(253, 164, 175, 0.05); border-radius: 12px; border-left: 4px solid var(--warm-rose);">
+                <p style="color: var(--deep-teal); font-weight: 600; margin-bottom: 0.5rem;">Validation Framework:</p>
+                <p style="color: var(--slate); line-height: 1.7;">
+                    Transitions require you to: (1) Disengage from current task, (2) Hold the new task goal in mind, (3) Inhibit the old task set, (4) Shift attention, (5) Initiate the new task. That's five executive function processes happening at once. For neurodivergent brains with executive function differences, that's not a small ask—it's cognitive heavy lifting.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 3: Hyperfocus & Flow -->
+        <div class="card fade-in">
+            <h2><span class="symbol">⊛</span> Hyperfocus & Flow States</h2>
+            <p style="color: var(--slate); margin-bottom: 1.5rem; line-height: 1.7;">
+                The paradox of attention: difficulty focusing generally, but intense focus when sufficiently engaged.
+            </p>
+            
+            <div class="content-grid">
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ Defining Hyperfocus</h3>
+                    <p class="content-brief">Recent research establishes clear criteria for what hyperfocus actually is.</p>
+                    <div class="content-detail">
+                        <p><strong>Four Criteria for Hyperfocus:</strong></p>
+                        <ol style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                            <li>The task must be engaging (fun, interesting, important)</li>
+                            <li>Characterized by intense sustained or selective attention</li>
+                            <li>Diminished perception of non-task-relevant stimuli</li>
+                            <li>Task performance improves during hyperfocus</li>
+                        </ol>
+                        <p style="margin-top: 0.75rem;">While most neurotypical people report experiencing hyperfocus-like states occasionally, it's most commonly referenced in autism, ADHD, and schizophrenia—conditions affecting attentional abilities.</p>
+                        <span class="research-badge">Recent Review Study</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ The Dopamine Connection</h3>
+                    <p class="content-brief">The ADHD brain processes dopamine differently, creating the hyperfocus paradox.</p>
+                    <div class="content-detail">
+                        <p><strong>How It Works:</strong></p>
+                        <p>When engaging in stimulating activities, the brain's reward system—particularly dopamine pathways associated with motivation and pleasure—becomes highly activated. This engagement makes it challenging to divert attention from the task.</p>
+                        <p style="margin-top: 0.75rem;">Changes in the frontal lobe, which controls the sense of reward, lead to hyperfocus. A task may be so rewarding that switching away becomes neurologically difficult. This dopamine deficiency is what makes shifting to less interesting (but necessary) tasks so challenging.</p>
+                        <span class="research-badge">Neurotransmitter Research</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ Hyperfocus vs. Flow</h3>
+                    <p class="content-brief">These states look similar but arise from different processes and have different effects.</p>
+                    <div class="content-detail">
+                        <p><strong>Key Distinctions:</strong></p>
+                        <p><strong>Flow (Csikszentmihalyi):</strong> Represents the ideal intersection of challenge and skill level, where concentration, creativity, and enjoyment merge with clear goals and immediate feedback. You're "moving and grooving" with awareness of surroundings.</p>
+                        <p style="margin-top: 0.75rem;"><strong>Hyperfocus:</strong> Often overrides self-control, time awareness, and self-care. An artifact of the brain's craving for instant stimulation—a neurobiological marker of ADHD related to dopamine dysregulation. You're so zoomed in that you're unaware of where you are.</p>
+                        <span class="research-badge">Comparative Analysis</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ The Double-Edged Nature</h3>
+                    <p class="content-brief">Hyperfocus can be both superpower and challenge simultaneously.</p>
+                    <div class="content-detail">
+                        <p><strong>Strengths:</strong></p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                            <li>Deep, sustained engagement allows mastery of complex topics</li>
+                            <li>Exceptional productivity during hyperfocus periods</li>
+                            <li>Source of creativity, innovation, and expertise</li>
+                            <li>Often when best work happens</li>
+                        </ul>
+                        <p style="margin-top: 0.75rem;"><strong>Challenges:</strong></p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                            <li>Losing track of time entirely (hours disappear)</li>
+                            <li>Neglecting basic needs like eating, sleeping, hygiene</li>
+                            <li>Missing appointments, deadlines, social commitments</li>
+                            <li>Hard to interrupt or redirect</li>
+                        </ul>
+                        <span class="research-badge">Clinical Observations</span>
+                    </div>
+                </div>
+
+                <div class="content-card" onclick="toggleExpand(this)">
+                    <span class="expand-indicator">▼</span>
+                    <h3>◈ Hyperfocus in Autism</h3>
+                    <p class="content-brief">Autism is associated with both elevated ADHD traits AND distinctive attentional strengths.</p>
+                    <div class="content-detail">
+                        <p><strong>Research Findings:</strong></p>
+                        <p>Research shows 20-80% of autistic individuals show elevated ADHD traits even without ADHD diagnosis. In the ASD literature, attentional strengths are often described negatively as "hyperfocus," whereas in neurotypical populations, similar states are positively framed as "flow."</p>
+                        <p style="margin-top: 0.75rem;">The ability to enter intense focus depends on task engagement and doesn't preclude difficulties with focus in other contexts. The same individual may exhibit attentional strengths on preferred activities and weaknesses on non-preferred ones.</p>
+                        <span class="research-badge">Autism Comorbidity Studies</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(192, 132, 252, 0.05); border-radius: 12px; border-left: 4px solid var(--soft-purple);">
+                <p style="color: var(--deep-teal); font-weight: 600; margin-bottom: 0.5rem;">Reframing Hyperfocus:</p>
+                <p style="color: var(--slate); line-height: 1.7;">
+                    Hyperfocus is not a malfunction—it's your brain optimally engaged with something that provides sufficient dopamine reward. The challenge isn't the hyperfocus itself; it's (1) difficulty choosing when to engage it, (2) difficulty disengaging when needed, and (3) a world that often demands we focus on things that don't naturally engage our reward systems.
+                </p>
+            </div>
+        </div>
+
+        <!-- Discussion Prompts -->
+        <div class="card fade-in">
+            <h2><span class="symbol">💬</span> Reflection & Discussion Prompts</h2>
+            <p style="color: var(--slate); margin-bottom: 1.5rem; line-height: 1.7;">
+                Use these prompts for paired discussions or personal reflection:
+            </p>
+            
+            <div class="prompt-section">
+                <h3>Exploring Time Blindness</h3>
+                <ul class="prompt-list">
+                    <li>Where does time disappear for you? What activities make hours vanish?</li>
+                    <li>How does time blindness show up in your daily life? What does it cost you?</li>
+                    <li>What messages have you internalized about your relationship with time?</li>
+                </ul>
+            </div>
+
+            <div class="prompt-section">
+                <h3>Transition Experiences</h3>
+                <ul class="prompt-list">
+                    <li>What transitions are hardest for you? Morning routines? Task-switching? Something else?</li>
+                    <li>Can you recognize the "five executive processes" when you struggle with transitions?</li>
+                    <li>What would help make transitions easier? (No wrong answers—even small things count)</li>
+                </ul>
+            </div>
+
+            <div class="prompt-section">
+                <h3>Hyperfocus & Flow</h3>
+                <ul class="prompt-list">
+                    <li>What do you hyperfocus on? Is it helpful, challenging, or both?</li>
+                    <li>Have you experienced the difference between hyperfocus and flow states?</li>
+                    <li>How has hyperfocus impacted your relationships, work, or self-care?</li>
+                </ul>
+            </div>
+
+            <div class="prompt-section">
+                <h3>Reframing & Validation</h3>
+                <ul class="prompt-list">
+                    <li>What would change if you truly believed your time struggles are neurological, not moral failures?</li>
+                    <li>Where do you experience shame around time? Can you extend compassion to yourself?</li>
+                    <li>What accommodations would help you with time and transitions?</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Key Takeaways -->
+        <div class="card fade-in">
+            <h2><span class="symbol">✦</span> Key Takeaways</h2>
+            
+            <div class="takeaway-box">
+                <h3>What We've Learned Today</h3>
+                <ul class="takeaway-list">
+                    <li><strong>Time blindness is neurological, not moral.</strong> Brain imaging studies confirm measurable differences in how neurodivergent brains process temporal information. Up to 90% of people with ADHD experience this.</li>
+                    <li><strong>Transitions require five executive functions at once.</strong> Disengaging, holding goals in mind, inhibiting old patterns, shifting attention, and initiating new tasks—that's cognitive heavy lifting for everyone, especially neurodivergent brains.</li>
+                    <li><strong>Hyperfocus is a feature, not a bug.</strong> It's your brain optimally engaged. The challenge is working with it (not against it) and building in safeguards for time, needs, and transitions.</li>
+                    <li><strong>Your struggles are valid and shared.</strong> Research confirms these experiences across neurodivergent populations. You're not alone, and you're not broken.</li>
+                    <li><strong>Accommodation is essential, not optional.</strong> External supports for time awareness and transition support aren't "crutches"—they're necessary tools for neurological differences.</li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(94, 234, 212, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%); border-radius: 12px;">
+                <p style="color: var(--deep-teal); font-weight: 600; margin-bottom: 0.5rem;">This Week's Practice:</p>
+                <p style="color: var(--slate); line-height: 1.7;">
+                    Try noticing with curiosity (not judgment): Where does time disappear? Where do transitions feel hardest? What triggers hyperfocus? Just notice, with compassion. Awareness is the first step toward working with—not against—your neurodivergent relationship with time.
+                </p>
+            </div>
+        </div>
+
+        <!-- Resources -->
+        <div class="card fade-in">
+            <h2><span class="symbol">📚</span> Further Learning</h2>
+            <p style="color: var(--slate); line-height: 1.7;">
+                <strong>Research Referenced:</strong>
+            </p>
+            <ul style="color: var(--slate); line-height: 2; margin-top: 1rem; margin-left: 1.5rem;">
+                <li>Russell Barkley's work on time blindness in ADHD (1990s-present)</li>
+                <li>Clinical studies on time perception in ADHD and autism (PMC, various)</li>
+                <li>Task-switching research in neurodevelopmental disorders</li>
+                <li>Hyperfocus: The Forgotten Frontier of Attention (comprehensive review)</li>
+                <li>Executive function studies in autism spectrum disorder</li>
+                <li>Dopamine and reward system research in ADHD</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function toggleExpand(card) {
+            card.classList.toggle('expanded');
+        }
+
+        // Add fade-in animations on scroll
+        window.addEventListener('load', () => {
+            const cards = document.querySelectorAll('.fade-in');
+            cards.forEach((card, index) => {
+                card.style.animation = `fadeIn 0.6s ease ${index * 0.1}s both`;
+            });
+        });
+    </script>
+</body>
+</html>
